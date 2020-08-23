@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>State-wise covid 19 cases</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+      <style>
+      .header{
+          padding: 10px;
+          background-color: teal;
+          margin-bottom: 100px;
+      }
+      footer{
+          background-color: rgb(1, 27, 27);
+          color: white;
+          padding: 20px;
+          margin-top: 100px;
+      }
+
+      td{
+        color: black;
+      }
+      body{
+      background-image: linear-gradient(to top, #9890e3 0%, #b1f4cf 100%);
+      }
+
+      </style>
+  </head>
+  <body>
+    <section class="header">
+      <h1 class="text-center">Covid Stats</h1>
+    </section>
+
+    <section class="container">
+
+      <table id="covidtable" class="table table-bordered table-dark padding">
+        <thead class="thead-dark">
+
+          <tr>
+            <th>State</th>
+            <th>Total Cases</th>
+            <th>Active Caess</th>
+            <th>Recovered cases</th>
+            <th>Deaths</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="tablebody">
+
+        </tbody>
+
+      </table>
+    </section>
+
+
+        <footer class="footer text-center mt-5">
+
+            <p>Designed and Developed By</p>
+            <p>Ramesh Reddy</p>
+
+        </footer>
+
+
+  </body>
+</html>
+
+<script>
+
+   var states=[];
+
+  $.ajax({
+    url:"https://api.covid19india.org/data.json",
+    type:'get',
+    datatype:"json",
+
+    success:function(response)
+    {
+      states=response.statewise;
+      updatetable(states);
+    },
+
+    error:function(error)
+    {
+      console.log(error);
+    },
+
+    always:function()
+    {
+
+    },
+  })
+
+  updatetable=(states)=>{
+
+    for(s of states){
+      var newrow="<tr><td>"+s.state+"</td><td>"+s.confirmed+"</td><td>"+s.active+"</td><td>"+s.recovered+"</td><td>"+s.deaths+"</td></tr>";
+      $("#tablebody").append(newrow)
+    }
+
+   $('#covidtable').DataTable();
+
+  }
+
+</script>
